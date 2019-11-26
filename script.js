@@ -1,26 +1,29 @@
-var currentDay = moment().format('MMMM Do YYYY, h:mm A');
-var day = moment().format('MMMM Do YYYY');
-var currentHour = moment().format('h A');
-var calRow = document.getElementsByClassName("textarea");
-var calHour = document.getElementsByClassName("hour");
-var textHour = "";
-
-
-
-
-function definePresent() {
-    for (i = 0; i < calHour.length; i++){ {
-        textHour = calHour[i].textContent;
-        console.log(textHour);
+$(document).ready(function() {
+    $(".saveBtn").on("click", function() {
+      var value = $(this).siblings(".description").val();
+      var time = $(this).parent().attr("id");
+        localStorage.setItem(time, value);
+    });
+    function  hourUpdater(){
+        $.each($(".time-block"), function (index) {
+            var blockHour = moment($(this).children(".hour")[0].innerText, "HH:mm A").format("HH");
+            var currentHour = moment().format("HH");
+            if (blockHour > currentHour) {
+                $(this).children(".description").addClass("future");
+            }
+            else if (blockHour < currentHour) {
+                $(this).children(".description").removeClass("future");
+                $(this).children(".description").addClass("past");
+            }
+            else {
+                $(this).children(".description").removeClass("future");
+                $(this).children(".description").removeClass("past");
+                $(this).children(".description").addClass("present");
+            }
+        }
+        );    
     }
-
-   var now = moment(textHour).fromNow();
-   console.log(now);
-
-    if (diff_in_hour = 0) {
-        $(calHour).removeClass( "hour" ).addClass( "present" );
-    }
-}
-}
-
-definePresent();
+  
+    hourUpdater()
+  });
+  
