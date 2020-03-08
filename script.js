@@ -1,29 +1,24 @@
 $(document).ready(function() {
-    $(".saveBtn").on("click", function() {
-      var value = $(this).siblings(".description").val();
-      var time = $(this).parent().attr("id");
-        localStorage.setItem(time, value);
-    });
-    function  hourUpdater(){
-        $.each($(".time-block"), function (index) {
-            var blockHour = moment($(this).children(".hour")[0].innerText, "HH:mm A").format("HH");
-            var currentHour = moment().format("HH");
-            if (blockHour > currentHour) {
-                $(this).children(".description").addClass("future");
+        $("#currentDay").text(moment().format("dddd, MMMM Do YYYY, h:mm:ss a"));
+    
+        /* Update color of input field based on time of day */
+        for (i = 1; i < 10; i++) {
+            $("#text-" + i).val(localStorage.getItem(i));
+            if ((i+8) < moment().format("k")) {
+                $("#text-" + i).css("background-color", "red");
             }
-            else if (blockHour < currentHour) {
-                $(this).children(".description").removeClass("future");
-                $(this).children(".description").addClass("past");
+            else if ((i+8) == moment().format("k")) {
+                $("#text-" + i).css("background-color", "green");
             }
             else {
-                $(this).children(".description").removeClass("future");
-                $(this).children(".description").removeClass("past");
-                $(this).children(".description").addClass("present");
+                $("#text-" + i).css("background-color", "blue");
             }
         }
-        );    
-    }
-  
-    hourUpdater()
-  });
+        
+        $(".saveBtn").click(function(){
+            for (i = 1; i < 10; i++) {
+                localStorage.setItem(i, document.getElementById("text-" + i).value);
+            }  
+        });
+    });
   
